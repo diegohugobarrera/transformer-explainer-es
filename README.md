@@ -1,65 +1,42 @@
-# Transformer Explainer: Interactive Learning of Text-Generative Models
+# Transformer Explainer en español
 
-Transformer Explainer is an interactive visualization tool designed to help anyone learn how Transformer-based models like GPT work. It runs a live GPT-2 model right in your browser, allowing you to experiment with your own text and observe in real time how internal components and operations of the Transformer work together to predict the next tokens. Try Transformer Explainer at http://poloclub.github.io/transformer-explainer and watch a demo video on YouTube https://youtu.be/TFUc41G2ikY.<br/><br/>
-[![MIT license](http://img.shields.io/badge/license-MIT-brightgreen.svg)](http://opensource.org/licenses/MIT)
-[![arxiv badge](https://img.shields.io/badge/arXiv-2408.04619-red)](https://arxiv.org/abs/2408.04619)
+Visualización interactiva de cómo funciona por dentro un modelo de lenguaje (LLM), adaptada al español para la **Tecnicatura Universitaria en Ciencia de Datos e Inteligencia Artificial** (IGTP, Universidad Provincial de Córdoba).
 
-<a href="https://youtu.be/TFUc41G2ikY" target="_blank"><img width="100%" src='https://github.com/user-attachments/assets/0a4d8888-6555-4df5-bc71-77f1299115c3'></a>
+**Usarlo en línea:** https://diegohugobarrera.github.io/transformer-explainer-es/
 
-## Live Demo
+Corre un GPT-2 (small, 124 millones de parámetros) **entrenado en español** directamente en el navegador, sin servidores: tokenización, embeddings, autoatención multi-cabeza, MLP, logits, temperatura y muestreo, todo con los números reales del modelo.
 
-Try Transformer Explainer: http://poloclub.github.io/transformer-explainer
+## Qué cambia respecto del original
 
-## Research Paper
+- Interfaz, visita guiada, ayudas y artículo traducidos al español.
+- Modelo reemplazado por [DeepESP/gpt2-spanish](https://huggingface.co/DeepESP/gpt2-spanish), exportado a ONNX con los scripts del proyecto (diferencia máxima de 0,02 en los logits frente al modelo de Hugging Face).
+- Tokenizador en español: palabras como "inteligencia" o "universidad" son un único token.
+- Ejemplos precalculados en español.
+- Funciona sin internet: tokenizador, motor ONNX y KaTeX se sirven desde el propio sitio.
 
-[**Transformer Explainer: Learning LLM Transformers with Interactive Visual Explanation and Experimentations**](https://dl.acm.org/doi/pdf/10.1145/3772318.3791725).
-Aeree Cho, Grace C. Kim, Alexander Karpekov, Seongmin Lee, Alec Helbling, Benjamin Hoover, Zijie J. Wang, Minsuk Kahng, Duen Horng Chau.
-_Proceedings of the 2026 CHI Conference on Human Factors in Computing Systems._
+## Requisitos
 
-## How to run locally
+Computadora con Chrome o Edge actualizado. La primera visita descarga unos 650 MB (el modelo) y quedan en la caché del navegador.
 
-#### Prerequisites
-
-- Node.js v20 or higher
-- NPM v10 or higher
-
-#### Steps
+## Desarrollo
 
 ```bash
-git clone https://github.com/poloclub/transformer-explainer.git
-cd transformer-explainer
-npm install
-npm run dev
+npm ci --legacy-peer-deps
+npm run dev        # servidor de desarrollo
+npx vite build     # sitio estático en build/
 ```
 
-Then, on your web browser, access http://localhost:5173.
+Para regenerar el modelo (requiere Python con torch, transformers y onnx):
 
-## Credits
-
-Transformer Explainer was created by <a href="https://aereeeee.github.io/" target="_blank">Aeree Cho</a>, <a href="https://www.linkedin.com/in/chaeyeonggracekim/" target="_blank">Grace C. Kim</a>, <a href="https://alexkarpekov.com/" target="_blank">Alexander Karpekov</a>, <a href="https://alechelbling.com/" target="_blank">Alec Helbling</a>, <a href="https://zijie.wang/" target="_blank">Jay Wang</a>, <a href="https://seongmin.xyz/" target="_blank">Seongmin Lee</a>, <a href="https://bhoov.com/" target="_blank">Benjamin Hoover</a>, and <a href="https://poloclub.github.io/polochau/" target="_blank">Polo Chau</a> at the Georgia Institute of Technology.
-
-## Citation
-
-```bibTeX
-@inproceedings{cho2026transformer,
-  title={Transformer Explainer: Learning LLM Transformers with Interactive Visual Explanation and Experimentation},
-  author={Cho, Aeree and Kim, Grace C and Karpekov, Alexander and Lee, Seongmin and Helbling, Alec and Hoover, Benjamin and Wang, Zijie J and Kahng, Minsuk and Chau, Duen Horng},
-  booktitle={Proceedings of the 2026 CHI Conference on Human Factors in Computing Systems},
-  pages={1--21},
-  year={2026}
-}
+```bash
+MODEL_PATH=/ruta/a/gpt2-spanish OUT_NAME=gpt2-es PYTHONPATH=src/utils/model \
+  python3 src/utils/model/export_to_onnx.py
 ```
 
-## License
+y partir `src/utils/model/params_output/gpt2-es.onnx` en fragmentos de 10 MB dentro de `static/model-es/`.
 
-The software is available under the [MIT License](https://github.com/poloclub/transformer-explainer/blob/main/LICENSE).
+## Créditos
 
-## Contact
-
-If you have any questions, feel free to [open an issue](https://github.com/poloclub/transformer-explainer/issues/new/choose) or contact [Aeree Cho](https://aereeeee.github.io/) or any of the contributors listed above.
-
-## More AI explainers to check out
-
-- [**Diffusion Explainer**](https://poloclub.github.io/diffusion-explainer) for learning how Stable Diffusion transforms text prompt into image
-- [**CNN Explainer**](https://poloclub.github.io/cnn-explainer)
-- [**GAN Lab**](https://poloclub.github.io/ganlab) for playing with Generative Adversarial Networks in browser
+- [Transformer Explainer](https://poloclub.github.io/transformer-explainer/), de Aeree Cho, Grace C. Kim, Alexander Karpekov, Alec Helbling, Jay Wang, Seongmin Lee, Benjamin Hoover y Polo Chau (Georgia Institute of Technology). Licencia MIT.
+- Modelo [DeepESP/gpt2-spanish](https://huggingface.co/DeepESP/gpt2-spanish). Licencia MIT.
+- Adaptación al español: Diego Barrera.
